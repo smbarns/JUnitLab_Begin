@@ -1,7 +1,7 @@
 package csc131.junit;
 
 import static org.junit.Assert.assertEquals;
-import org.junit.rules.ExpectedException;
+import static org.junit.Assert.assertThrows;
 import org.junit.jupiter.api.Test;
 
 class GiftCardTest {
@@ -41,16 +41,61 @@ class GiftCardTest {
 		 double balance;
 		 GiftCard card;
 		 int issuingStore;
-		 String display;
+		 String display = "Remaining Balance : 50.00";
 
 		 issuingStore = 1337;
 		 balance = 100.00;
 		 card = new GiftCard(issuingStore, balance);
 
-		 display = "Remaining Balance: " + String.format("%6.2f", 90.00);
-		 System.out.println(display);
-		 assertEquals("deduct()", display, card.deduct(10.00));
+		 assertEquals("deduct()", display, card.deduct(50.00));
+	 }
+	 
+	 @Test
+	 public void deduct_Increase()
+	 {
+		 double balance;
+		 GiftCard card;
+		 int issuingStore;
+		 String display = "Invalid Transaction"; 
+
+		 issuingStore = 1337;
+		 balance = 100.00;
+		 card = new GiftCard(issuingStore, balance);
+
+		 assertEquals("deduct()", display, card.deduct(-1));
 	 }
 
+	 @Test
+	 public void deduct_NoChange()
+	 {
+		 double balance;
+		 GiftCard card;
+		 int issuingStore;
+		 String display = "Amount Due: 10.00";
+
+		 issuingStore = 1337;
+		 balance = 100.00;
+		 card = new GiftCard(issuingStore, balance);
+
+		 assertEquals("deduct()", display, card.deduct(110));
+	 }
+	
+	 @Test 
+	 public void testExep()
+	 {
+		assertThrows(IllegalArgumentException.class, () -> {new GiftCard(1,-100.00);});
+	 }
+	 
+	 @Test
+	 public void constructor_IncorrectID()
+	 {
+		assertThrows(IllegalArgumentException.class, () -> {new GiftCard(-1,100.00);});
+	 }
+	 
+	 @Test
+	 public void constructor_IncorrectID_High()
+	 {
+		assertThrows(IllegalArgumentException.class, () -> {new GiftCard(10000,100.00);});
+	 }
 }
 
